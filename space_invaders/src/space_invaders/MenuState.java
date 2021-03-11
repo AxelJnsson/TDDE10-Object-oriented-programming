@@ -1,65 +1,69 @@
 package space_invaders;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
+
 import javafx.scene.input.KeyEvent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+/**
+ * The menustate displays the highscores and is where you will end up when the game is finished.
+ * @author martin
+ *
+ */
 public class MenuState extends GameState {
 
 	private String info;
 	private Color bgColor;
 	private Color fontColor;
-	private GraphicsContext gc;
-	
-	private PlayState playState;
-	
+	private String data;
+
 	public MenuState(GameModel model) {
 		super(model);
-		playState = new PlayState(model);
-		info = "WELCOME TO SPACE INVADERS";
+		info = "WELCOME TO SPACE INVADERS\n                 HIGH SCORES";
 		bgColor = Color.BLACK;
 		fontColor = Color.GREEN;
-		
+
 	}
-	
+
 	@Override
 	public void draw(GraphicsContext g) {
 		drawBg(g, bgColor);
-
 		g.setFill(fontColor);
-		g.setFont(new Font(30)); 
+		g.setFont(new Font(30));
 		g.fillText(info, 250, 200);
+		g.setFont(new Font(30));
+		int i = 290;
+		try {
+			File hs = new File("highscore.txt");
+			Scanner myReader = new Scanner(hs);
+			while (myReader.hasNextLine()) {
+				data = myReader.nextLine();
+				g.fillText(data, 400, i);
+				i += 30;
+			}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent key) {
+
 		System.out.println("Trycker på " + key.getText() + " i MenuState");
 
-		//if (key.getCode() == KeyCode.ENTER) {
-		//	model.switchState(playState);
-		//} else if (key.getCode() == KeyCode.ESCAPE) {
-		//	System.exit(0);
-		//}
 	}
-	
+
 	@Override
 	public void update() {
-	}
-	
-	@Override
-	public void activate() {
-
-	}
-	
-	@Override
-	public void deactivate() {
-		//gc.clearRect(0, 0, 1000, 750);
 	}
 
 }
